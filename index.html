@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Interaktif dari Dezka 💬</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background-color: #0d1117;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .header {
+      background: #161b22;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: bold;
+      border-bottom: 1px solid #21262d;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bubble {
+      max-width: 75%;
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease-out;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .dezka {
+      align-self: flex-start;
+      background-color: #2f3542;
+      border-bottom-left-radius: 5px;
+    }
+
+    .yahya {
+      align-self: flex-end;
+      background-color: #238636;
+      color: white;
+      border-bottom-right-radius: 5px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 16px;
+      border-top: 1px solid #21262d;
+      background-color: #161b22;
+    }
+
+    .option-btn {
+      background-color: #30363d;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      text-align: right;
+    }
+
+    .option-btn:hover {
+      background-color: #3c4452;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">Dezka 💬</div>
+  <div class="chat-box" id="chatBox"></div>
+  <div class="options" id="optionsBox"></div>
+
+  <script>
+    const chatBox = document.getElementById('chatBox');
+    const optionsBox = document.getElementById('optionsBox');
+
+    const chatFlow = [
+      { from: 'dezka', text: 'Kalau kamu jadi planet, kamu pasti Jupiter.' },
+      {
+        options: [
+          "Jupiter? Karena paling besar?",
+          "Apasi gajelas banget anjay",
+        ]
+      },
+      { from: 'dezka', text: 'Bukan. Karena kamu punya gravitasi paling kuat—aku nggak bisa berhenti ketarik ke kamu.' },
+      {
+        options: [
+          "Ohh",
+          "I see",
+        ]
+      },
+      { from: 'dezka', text: 'Kalau hidup ini ranked game, aku cuma mau bareng EXP laner kayak kamu. ' },
+      {
+        options: [
+          "Kenapa gitu?",
+          "Karena?",
+        ]
+      },
+      { from: 'dezka', text: 'Karena kamu selalu tahan di garis depan, tapi nggak pernah ninggalin belakang' },
+      {
+        options: [
+          "Wkwkwkwk",
+          "Adalagi?",
+        ]
+      },
+      { from: 'dezka', text: 'ELULAH GANJA GW' },
+      { from: 'dezka', text: 'Udah dulu aku capek ngetik anjay' },
+      { from: 'dezka', text: 'Sekian terima kasih sayang' },
+      { from: 'dezka', text: 'I love you so much' },
+      { from: 'dezka', text: 'BALES GA?!?!?!?' },
+      { from: 'dezka', text: 'WKWKWKWK kasian gbs bales karena ak yg ngatur webnya HAHAHAHHA' },
+      { from: 'dezka', text: 'Blesnya di chat aja yah stelah km buka ini, lofyuu' },
+
+    ];
+
+    let index = 0;
+
+    function showNext() {
+      const step = chatFlow[index];
+
+      if (!step) return;
+
+      if (step.from) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('bubble', step.from);
+        bubble.textContent = step.text;
+        chatBox.appendChild(bubble);
+        requestAnimationFrame(() => bubble.style.animation = 'fadeIn 0.3s forwards');
+        chatBox.scrollTop = chatBox.scrollHeight;
+        index++;
+        setTimeout(showNext, 1200);
+      } else if (step.options) {
+        optionsBox.innerHTML = '';
+        step.options.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'option-btn';
+          btn.textContent = opt;
+          btn.onclick = () => {
+            sendOption(opt);
+          };
+          optionsBox.appendChild(btn);
+        });
+      }
+    }
+
+    function sendOption(text) {
+      optionsBox.innerHTML = '';
+      const bubble = document.createElement('div');
+      bubble.classList.add('bubble', 'yahya');
+      bubble.textContent = '';
+      chatBox.appendChild(bubble);
+
+      let i = 0;
+      const typer = setInterval(() => {
+        bubble.textContent += text[i];
+        i++;
+        if (i >= text.length) {
+          clearInterval(typer);
+          requestAnimationFrame(() => bubble.style.animation = 'fadeIn 0.3s forwards');
+          chatBox.scrollTop = chatBox.scrollHeight;
+          index++;
+          setTimeout(showNext, 800);
+        }
+      }, 25);
+    }
+
+    // Start the chat
+    showNext();
+  </script>
+</body>
+</html>
